@@ -1,8 +1,6 @@
-const convertMdToHTML = (md: string): string => {
-  let html = md;
-
-  const lines = html.split('\n');
-  html = lines.map((line) => {
+const replaceParagraphs = (md: string): string => {
+  const lines = md.split('\n');
+  return lines.map((line) => {
     const isBold = line.startsWith('**');
     const isItalic = line.startsWith('_');
     const isCode = line.startsWith('```');
@@ -13,6 +11,12 @@ const convertMdToHTML = (md: string): string => {
     }
     return line;
   }).join('\n')
+}
+
+const convertMdToHTML = (md: string): string => {
+  let html = md;
+
+  html = replaceParagraphs(html);
 
   html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
 
