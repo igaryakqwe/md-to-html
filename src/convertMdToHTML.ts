@@ -1,12 +1,24 @@
 class MarkdownConverter {
   private errorMessage: string = '';
 
+  private checkErrors(md: string): void {
+    const lines = md.split('\n');
+    lines.forEach((line, index) => {
+      const trimmedLine = line.trim();
+      const isMultipleTags = trimmedLine.includes('**') && trimmedLine.includes('_') && trimmedLine.includes('`');
+      if (isMultipleTags) {
+        this.errorMessage += `In the line ${index + 1}, there are bold, italic and monospaced tags together\n`;
+        return
+      }
+    });
+  }
+
   private convertBold(md: string): string {
     const lines = md.split('\n');
     let isPreformatted = false;
     return lines.map((line, index) => {
       const trimmedLine = line.trim();
-      const isBold = trimmedLine.startsWith('**') && trimmedLine.endsWith('**');
+      const isBold = trimmedLine.startsWith('**') && trimmedLine.endsWith('**') && trimmedLine !== '**'
       const includesSpaces = trimmedLine.includes('** ') || trimmedLine.includes(' **');
 
       if (trimmedLine.includes('<pre>')) {
@@ -17,7 +29,7 @@ class MarkdownConverter {
         isPreformatted = false;
       }
 
-      if (isBold && !includesSpaces && isPreformatted) {
+      if (isBold && !includesSpaces && !isPreformatted) {
         return `<b>${line.slice(2, line.length - 3)}</b>`;
       }
 
@@ -38,7 +50,7 @@ class MarkdownConverter {
     let isPreformatted = false;
     return lines.map((line, index) => {
       const trimmedLine = line.trim();
-      const isItalic = trimmedLine.startsWith('_') && trimmedLine.endsWith('_');
+      const isItalic = trimmedLine.startsWith('_') && trimmedLine.endsWith('_') && trimmedLine !== '_';
       const includesSpaces = trimmedLine.includes('_ ') || trimmedLine.includes(' _');
 
       if (trimmedLine.includes('<pre>')) {
@@ -49,7 +61,7 @@ class MarkdownConverter {
         isPreformatted = false;
       }
 
-      if (isItalic && !includesSpaces && isPreformatted) {
+      if (isItalic && !includesSpaces && !isPreformatted) {
         return `<i>${line.slice(1, line.length - 2)}</i>`;
       }
 
@@ -73,7 +85,8 @@ class MarkdownConverter {
       const isMonospaced =
         trimmedLine.startsWith('`')
         && trimmedLine.endsWith('`')
-        && !trimmedLine.includes('```');
+        && !trimmedLine.includes('```')
+        && trimmedLine !== '`';
       const includesSpaces = trimmedLine.includes('` ') || trimmedLine.includes(' `');
 
       if (trimmedLine.includes('<pre>')) {
@@ -84,7 +97,7 @@ class MarkdownConverter {
         isPreformatted = false;
       }
 
-      if (isMonospaced && !includesSpaces && isPreformatted) {
+      if (isMonospaced && !includesSpaces && !isPreformatted) {
         return `<tt>${line.slice(1, line.length - 2)}</tt>`;
       }
 
@@ -177,10 +190,12 @@ class MarkdownConverter {
   public convertMdToHTML(md: string): string {
     let html = md;
 
+    this.checkErrors(md);
+
+    html = this.convertPreformatted(html);
     html = this.convertBold(html);
     html = this.convertItalic(html);
     html = this.convertMonospaced(html);
-    html = this.convertPreformatted(html);
     html = this.convertParagraph(html);
 
     if (this.errorMessage) {
