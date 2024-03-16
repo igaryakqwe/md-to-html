@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import convertMdToHTML from "./convertMdToHTML";
+import MarkdownConverter from "./convertMdToHTML";
 
 const readFile = (filePath: string): void => {
   fs.readFile(filePath, "utf-8", (err, data) => {
@@ -11,7 +11,7 @@ const readFile = (filePath: string): void => {
       console.error("This is not a markdown file");
       return;
     }
-    console.log(convertMdToHTML(data));
+    console.log(MarkdownConverter.convertMdToHTML(data));
   });
 }
 
