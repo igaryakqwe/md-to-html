@@ -1,12 +1,27 @@
+import * as path from "path";
 import fileReader from "./fileReader";
-import * as readline from "readline";
+import * as fs from "fs";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const currentDirectory = process.cwd();
 
-rl.question('Input the path to MD file: ', (path: string) => {
-  fileReader(path);
-  rl.close();
-})
+const args = process.argv.slice(2);
+let outputPath: string | undefined = undefined;
+
+if (args.length === 2) {
+  outputPath = args[1];
+}
+
+const filePath = args[0];
+
+if (!filePath) {
+  process.exit(1);
+}
+
+const result = fileReader(filePath);
+console.log(result);
+if (outputPath) {
+  const absoluteOutputPath = path.join(currentDirectory, outputPath);
+  fs.writeFileSync(absoluteOutputPath, result);
+}
+
+
