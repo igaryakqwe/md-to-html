@@ -5,7 +5,6 @@ import * as fs from "fs";
 const currentDirectory = process.cwd();
 
 const args = process.argv.slice(2);
-console.log(args);
 let outputPath: string | undefined = undefined;
 
 if (args.includes("--out")) {
