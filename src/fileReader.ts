@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import MarkdownConverter from "./convertMdToHTML";
+import MarkdownConverter from "./MarkdownConverter";
 
 const readFile = (filePath: string): string => {
   try {
@@ -10,7 +10,7 @@ const readFile = (filePath: string): string => {
       return "";
     }
 
-    return MarkdownConverter.convertMdToHTML(data);
+    return new MarkdownConverter('ansi').convert(data);
   } catch (err) {
     console.error("File or path not found or cannot be read:", err);
     return "";

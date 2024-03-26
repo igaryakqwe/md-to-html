@@ -27,4 +27,3 @@ if (outputPath) {
   fs.writeFileSync(absoluteOutputPath, result);
 }
 
-
