@@ -21,8 +21,9 @@ npm run start <path-to-file>
 and if you should write the result into the file, you can run the following command:
 
 ```shell
-npm run start <path-to-file> --out <name-of-result-file>
+npm run start <path-to-file> -- --out <name-of-result-file>
 ```
+pay attention to the double dash `--` before `--out`, it is necessary to separate the arguments for the application and the arguments for the script.
 
 this will create a file with the name `name-of-result-file.html` in the root of the project.
 
