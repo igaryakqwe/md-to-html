@@ -5,10 +5,14 @@ import * as fs from "fs";
 const currentDirectory = process.cwd();
 
 const args = process.argv.slice(2);
+console.log(args);
 let outputPath: string | undefined = undefined;
 
-if (args.length === 2) {
-  outputPath = args[1];
+if (args.includes("--out")) {
+  const nextArgIndex = args.indexOf("--out") + 1
+  if (!args[nextArgIndex].includes('--')) {
+    outputPath = args[nextArgIndex];
+  }
 }
 
 const filePath = args[0];
