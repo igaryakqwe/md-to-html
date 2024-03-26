@@ -3,7 +3,7 @@ import { convertations } from "./constants";
 
 class MarkdownConverter {
   private errorMessage: string = '';
-  constructor(private format: ConvertFormat) {}
+  constructor(private format: ConvertFormat = 'html') {}
   private currentFormat = convertations[this.format];
 
   private checkErrors(md: string): void {

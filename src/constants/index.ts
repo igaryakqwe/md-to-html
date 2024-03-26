@@ -1,6 +1,6 @@
-import {Convertations} from "../types";
+import {Convertations, Format} from "../types";
 
-export const convertations: Convertations = {
+export const convertations: Convertations<Format> = {
   html: {
     bold: {
       open: '<b>',

@@ -14,7 +14,7 @@ export type Format = {
   paragraph: Tag;
 };
 
-export type Convertations = {
-  html: Format;
-  ansi: Format;
+export type Convertations<T> = {
+  html: T;
+  ansi: T;
 };
