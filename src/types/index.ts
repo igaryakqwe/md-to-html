@@ -18,3 +18,16 @@ export type Convertations<T> = {
   html: T;
   ansi: T;
 };
+
+export interface TestCase {
+  input: string;
+  expected: {
+    html: string;
+    ansi: string;
+  };
+}
+
+export interface ErrorTestCase {
+  input: string;
+  expected: string;
+}

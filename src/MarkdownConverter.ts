@@ -37,7 +37,7 @@ class MarkdownConverter {
       }
 
       if (isBold && !includesSpaces && !isPreformatted) {
-        return `${open}${line.slice(2, line.length - 3)}${close}`;
+        return `${open + trimmedLine.slice(2, trimmedLine.length - 2) + close}`;
       }
 
       if (trimmedLine.startsWith('**') && !trimmedLine.endsWith('**')) {
@@ -71,7 +71,7 @@ class MarkdownConverter {
       }
 
       if (isItalic && !includesSpaces && !isPreformatted) {
-        return `${open}${line.slice(1, line.length - 2)}${close}`;
+        return `${open + line.slice(1, trimmedLine.length - 1) + close}`;
       }
 
       if (trimmedLine.startsWith('_') && !trimmedLine.endsWith('_')) {
@@ -109,7 +109,7 @@ class MarkdownConverter {
       }
 
       if (isMonospaced && !includesSpaces && !isPreformatted) {
-        return `${open}${line.slice(1, line.length - 2)}${close}`;
+        return `${open + line.slice(1, trimmedLine.length - 1) + close}`;
       }
 
       if (trimmedLine.startsWith('`') && !trimmedLine.endsWith('`') && isMonospaced) {
@@ -144,7 +144,7 @@ class MarkdownConverter {
           isInsidePreformattedBlock = false;
           preformattedContent += `${close}\n`;
         } else {
-          preformattedContent += '  ' + line + '\n';
+          preformattedContent += line + '\n';
         }
       } else if (isPreformatted) {
         isInsidePreformattedBlock = true;
@@ -188,7 +188,7 @@ class MarkdownConverter {
         !isPre;
 
       if (isValid) {
-        paragraph += `${trimmedLine} `;
+        paragraph = paragraph.concat(`${trimmedLine} `)
       } else {
         if (paragraph.trim() !== '') {
           result += `${open + paragraph.trim() + close}`;
@@ -202,23 +202,23 @@ class MarkdownConverter {
   }
 
   public convert(md: string): string {
-    let html = md;
+    let result = md;
 
     this.checkErrors(md);
 
-    html = this.convertPreformatted(html);
-    html = this.convertBold(html);
-    html = this.convertItalic(html);
-    html = this.convertMonospaced(html);
+    result = this.convertPreformatted(result);
+    result = this.convertBold(result);
+    result = this.convertItalic(result);
+    result = this.convertMonospaced(result);
     if (this.format === 'html') {
-      html = this.convertParagraph(html);
+      result = this.convertParagraph(result);
     }
 
     if (this.errorMessage) {
       return this.errorMessage;
     }
 
-    return html;
+    return result.trim();
   }
 }
 
