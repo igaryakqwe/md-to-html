@@ -6,7 +6,7 @@ import {Convertations, ConvertFormat} from "./types";
 const currentDirectory = process.cwd();
 
 const args = process.argv.slice(2);
-let outputPath: string | undefined = undefined;
+let outputPath: string = '';
 let format: ConvertFormat | '' = '';
 
 if (args.includes("--out")) {
